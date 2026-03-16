@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>AuraBaby Viewer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: #07030f;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      color: #fff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      background: rgba(8, 3, 18, 0.97);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid rgba(176,106,255,0.4);
+      box-shadow: 0 2px 40px rgba(176,106,255,0.2);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      z-index: 100;
+    }
+
+    .bar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .back-btn {
+      background: linear-gradient(135deg, #b06aff, #ff6eb4);
+      color: #fff;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 50px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 20px rgba(176,106,255,0.4);
+      white-space: nowrap;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(255,110,180,0.7);
+    }
+
+    .bar-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #ff6eb4, #fff, #b06aff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .bar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #b06aff;
+      box-shadow: 0 0 10px rgba(176,106,255,0.8);
+      animation: statusPulse 1.8s ease-in-out infinite;
+    }
+
+    .status-dot.live { background: #00e5a0; box-shadow: 0 0 10px rgba(0,229,160,0.8); }
+
+    @keyframes statusPulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50%       { transform: scale(1.4); opacity: 1; }
+    }
+
+    .status-text {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: rgba(176,106,255,0.8);
+      text-transform: uppercase;
+    }
+
+    .fullscreen-btn {
+      background: rgba(176,106,255,0.15);
+      border: 1px solid rgba(176,106,255,0.4);
+      color: rgba(200,180,255,0.9);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 11px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+
+    .fullscreen-btn:hover {
+      background: rgba(176,106,255,0.3);
+      border-color: var(--violet);
+      box-shadow: 0 0 20px rgba(176,106,255,0.4);
+    }
+
+    /* ── IFRAME CONTAINER ── */
+    .viewer-wrap {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      border: none;
+      background: #000;
+    }
+
+    /* ── LOADING OVERLAY ── */
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 3, 15, 0.97);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      z-index: 50;
+      transition: opacity 0.6s ease;
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner-ring {
+      width: 70px; height: 70px;
+      position: relative;
+    }
+
+    .spinner-ring::before,
+    .spinner-ring::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      border: 3px solid transparent;
+    }
+
+    .spinner-ring::before {
+      inset: 0;
+      border-top-color: #b06aff;
+      border-right-color: #ff6eb4;
+      animation: spin 1.2s linear infinite;
+    }
+
+    .spinner-ring::after {
+      inset: 10px;
+      border-bottom-color: #00e5ff;
+      border-left-color: rgba(176,106,255,0.5);
+      animation: spin 0.8s linear infinite reverse;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      text-align: center;
+    }
+
+    .loading-text h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, #ff6eb4, #fff, #b06aff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+
+    .loading-text p {
+      font-size: 12px;
+      color: rgba(176,106,255,0.7);
+      letter-spacing: 2px;
+    }
+
+    .loading-dots span {
+      display: inline-block;
+      animation: dotBounce 1.4s ease-in-out infinite;
+    }
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes dotBounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+      40%            { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* ── HINT BAR ── */
+    .hint-bar {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      color: rgba(176,106,255,0.35);
+      letter-spacing: 2px;
+      pointer-events: none;
+      z-index: 200;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      .bar-title { font-size: 12px; }
+      .fullscreen-btn { display: none; }
+      .status-text { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="bar-left">
+      <button class="back-btn" onclick="window.location.href='index.html'">← BACK</button>
+      <div class="bar-title" id="barTitle">Loading...</div>
+    </div>
+    <div class="bar-right">
+      <div class="status-dot" id="statusDot"></div>
+      <span class="status-text" id="statusText">CONNECTING</span>
+      <button class="fullscreen-btn" onclick="goFullscreen()">⛶ FULLSCREEN</button>
+    </div>
+  </div>
+
+  <div class="viewer-wrap">
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="spinner-ring"></div>
+      <div class="loading-text">
+        <h3 id="loadingSiteName">LAUNCHING</h3>
+        <p>Routing through AuraBaby proxy<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span></p>
+      </div>
+    </div>
+
+    <iframe
+      id="viewer"
+      allowfullscreen
+      allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+      sandbox="allow-same-origin allow-scripts allow-forms allow-pointer-lock allow-popups allow-modals allow-orientation-lock allow-popups-to-escape-sandbox allow-presentation allow-top-navigation allow-top-navigation-by-user-activation"
+    ></iframe>
+  </div>
+
+  <div class="hint-bar">ESC — go back &nbsp;·&nbsp; F — fullscreen</div>
+
+  <script>
+    const params  = new URLSearchParams(window.location.search);
+    const encoded = params.get('site');
+    const name    = params.get('name') || 'Anime Site';
+
+    const viewer      = document.getElementById('viewer');
+    const overlay     = document.getElementById('loadingOverlay');
+    const barTitle    = document.getElementById('barTitle');
+    const statusDot   = document.getElementById('statusDot');
+    const statusText  = document.getElementById('statusText');
+    const loadingName = document.getElementById('loadingSiteName');
+
+    barTitle.textContent    = name.toUpperCase();
+    loadingName.textContent = name.toUpperCase();
+
+    if (!encoded) {
+      barTitle.textContent  = 'ERROR';
+      statusText.textContent = 'NO URL';
+    } else {
+      // Decode the target URL then proxy it through /ocho/
+      try {
+        const raw = atob(encoded.replace(/-/g, '+').replace(/_/g, '/'));
+        const proxyEncoded = btoa(raw).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+        viewer.src = `/ocho/${proxyEncoded}`;
+      } catch(e) {
+        statusText.textContent = 'DECODE ERROR';
+      }
+    }
+
+    viewer.onload = () => {
+      overlay.classList.add('hidden');
+      statusDot.classList.add('live');
+      statusText.textContent = 'LIVE';
+    };
+
+    // Fallback hide loader after 10s
+    setTimeout(() => {
+      overlay.classList.add('hidden');
+      statusDot.classList.add('live');
+      statusText.textContent = 'LIVE';
+    }, 10000);
+
+    function goFullscreen() {
+      const el = document.querySelector('.viewer-wrap');
+      if (el.requestFullscreen) el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') window.location.href = 'index.html';
+      if (e.key === 'f' || e.key === 'F') goFullscreen();
+    });
+  </script>
+</body>
+</html>
