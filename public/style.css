@@ -1,0 +1,485 @@
+/* ─── RESET & BASE ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --pink:    #ff6eb4;
+  --violet:  #b06aff;
+  --cyan:    #00e5ff;
+  --white:   #ffffff;
+  --bg:      #07030f;
+  --card-bg: rgba(18, 8, 35, 0.85);
+  --border:  rgba(176, 106, 255, 0.45);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ─── COSMIC BACKGROUND ─────────────────────────────────────── */
+.bg-layer {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.stars-sm {
+  background-image:
+    radial-gradient(1px 1px at 15px 25px, #fff, transparent),
+    radial-gradient(1px 1px at 55px 75px, #e0c8ff, transparent),
+    radial-gradient(1px 1px at 95px 35px, #fff, transparent),
+    radial-gradient(1px 1px at 135px 95px, #ffd6f0, transparent),
+    radial-gradient(1px 1px at 175px 15px, #fff, transparent),
+    radial-gradient(1px 1px at 215px 55px, #c8e0ff, transparent);
+  background-size: 240px 120px;
+  animation: twinkle 6s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+.stars-md {
+  background-image:
+    radial-gradient(2px 2px at 40px 60px, #fff, transparent),
+    radial-gradient(2px 2px at 120px 20px, #e0c8ff, transparent),
+    radial-gradient(2px 2px at 200px 80px, #fff, transparent),
+    radial-gradient(2px 2px at 280px 40px, #ffd6f0, transparent),
+    radial-gradient(1px 1px at 160px 100px, #fff, transparent);
+  background-size: 320px 140px;
+  animation: twinkle 9s ease-in-out infinite reverse;
+  opacity: 0.5;
+}
+
+.stars-lg {
+  background-image:
+    radial-gradient(3px 3px at 80px 80px, rgba(255,255,255,0.9), transparent),
+    radial-gradient(2px 2px at 240px 30px, rgba(224,200,255,0.8), transparent),
+    radial-gradient(3px 3px at 360px 110px, rgba(255,255,255,0.9), transparent);
+  background-size: 480px 160px;
+  animation: twinkle 12s ease-in-out infinite;
+  opacity: 0.4;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.35; }
+  50%       { opacity: 0.85; }
+}
+
+.nebula {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 30%, rgba(176,106,255,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 70%, rgba(255,110,180,0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 50% 0%,  rgba(0,229,255,0.10) 0%, transparent 55%);
+  animation: nebulaDrift 25s ease-in-out infinite alternate;
+}
+
+@keyframes nebulaDrift {
+  0%   { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(1.08) rotate(3deg); }
+}
+
+/* ─── PETALS ─────────────────────────────────────────────────── */
+.petals {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.petal {
+  position: absolute;
+  top: -40px;
+  color: var(--pink);
+  animation: petalFall linear infinite;
+  filter: drop-shadow(0 0 6px rgba(255,110,180,0.5));
+}
+
+@keyframes petalFall {
+  0%   { transform: translateY(-40px) rotate(0deg) translateX(0px); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.7; }
+  100% { transform: translateY(110vh) rotate(720deg) translateX(60px); opacity: 0; }
+}
+
+/* ─── HEADER BANNER ──────────────────────────────────────────── */
+.banner {
+  position: relative;
+  z-index: 10;
+  padding: 52px 30px 44px;
+  text-align: center;
+  overflow: hidden;
+  background: linear-gradient(180deg,
+    rgba(15, 5, 30, 0.97) 0%,
+    rgba(10, 3, 22, 0.85) 100%
+  );
+  border-bottom: 1px solid var(--border);
+  box-shadow:
+    0 4px 60px rgba(176,106,255,0.25),
+    0 1px 0 rgba(255,110,180,0.3);
+}
+
+.banner-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.banner-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.logo-aura {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(36px, 7vw, 72px);
+  font-weight: 900;
+  letter-spacing: 4px;
+  background: linear-gradient(135deg, #ff6eb4 0%, #ffffff 40%, #b06aff 70%, #00e5ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 30px rgba(176,106,255,0.8));
+  animation: logoShimmer 4s ease-in-out infinite;
+  text-transform: uppercase;
+}
+
+@keyframes logoShimmer {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(176,106,255,0.6)); }
+  50%       { filter: drop-shadow(0 0 50px rgba(255,110,180,1)) drop-shadow(0 0 80px rgba(0,229,255,0.6)); }
+}
+
+.logo-anime {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: clamp(14px, 2.5vw, 22px);
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+  text-shadow: 0 0 20px rgba(255,110,180,0.6);
+}
+
+.banner-sub {
+  margin-top: 14px;
+  font-size: 15px;
+  color: rgba(200,180,255,0.7);
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+/* Decorative rings */
+.banner-rings {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid;
+  animation: ringPulse 4s ease-in-out infinite;
+}
+
+.ring1 { width: 140px; height: 140px; border-color: rgba(176,106,255,0.25); animation-delay: 0s; }
+.ring2 { width: 260px; height: 260px; border-color: rgba(255,110,180,0.15); animation-delay: 0.7s; }
+.ring3 { width: 380px; height: 380px; border-color: rgba(0,229,255,0.10); animation-delay: 1.4s; }
+
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50%       { transform: scale(1.1); opacity: 1; }
+}
+
+/* ─── LAUNCHER SECTION ───────────────────────────────────────── */
+.launcher {
+  position: relative;
+  z-index: 5;
+  padding: 50px 30px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.section-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  letter-spacing: 5px;
+  color: rgba(176,106,255,0.8);
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(176,106,255,0.5);
+}
+
+/* ─── CARDS GRID ─────────────────────────────────────────────── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1100px;
+  width: 100%;
+}
+
+.card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 36px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: linear-gradient(135deg,
+    rgba(176,106,255,0.08) 0%,
+    transparent 50%,
+    rgba(255,110,180,0.06) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.card:hover::before { opacity: 1; }
+
+.card:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow:
+    0 0 50px rgba(176,106,255,0.45),
+    0 0 100px rgba(255,110,180,0.25),
+    0 20px 60px rgba(0,0,0,0.7);
+  border-color: rgba(176,106,255,0.8);
+}
+
+/* featured card */
+.card.featured {
+  border-color: rgba(255,110,180,0.6);
+  background: rgba(25, 8, 45, 0.9);
+}
+
+.card.featured:hover {
+  border-color: var(--pink);
+  box-shadow:
+    0 0 60px rgba(255,110,180,0.55),
+    0 0 120px rgba(176,106,255,0.3),
+    0 20px 60px rgba(0,0,0,0.7);
+}
+
+.featured-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: linear-gradient(135deg, var(--pink), var(--violet));
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255,110,180,0.6);
+}
+
+.card-glow {
+  position: absolute;
+  inset: -40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(176,106,255,0.12) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.card:hover .card-glow { opacity: 1; }
+
+/* ─── ICON CIRCLES ───────────────────────────────────────────── */
+.card-icon { position: relative; z-index: 2; }
+
+.icon-circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.card:hover .icon-circle {
+  transform: scale(1.15) rotate(10deg);
+}
+
+.icon-circle.kai {
+  background: linear-gradient(135deg, #0a2a5e, #1560bd);
+  border: 2px solid rgba(0,229,255,0.5);
+  box-shadow: 0 0 30px rgba(0,229,255,0.4), inset 0 0 20px rgba(0,100,255,0.3);
+}
+.card:hover .icon-circle.kai {
+  box-shadow: 0 0 50px rgba(0,229,255,0.8), inset 0 0 30px rgba(0,150,255,0.5);
+}
+
+.icon-circle.watch {
+  background: linear-gradient(135deg, #3a0a5e, #8a1abd);
+  border: 2px solid rgba(255,110,180,0.5);
+  box-shadow: 0 0 30px rgba(176,106,255,0.4), inset 0 0 20px rgba(140,50,200,0.3);
+}
+.card:hover .icon-circle.watch {
+  box-shadow: 0 0 50px rgba(255,110,180,0.8), inset 0 0 30px rgba(200,80,255,0.5);
+}
+
+.icon-circle.hi {
+  background: linear-gradient(135deg, #2a1a0a, #8b5e1a);
+  border: 2px solid rgba(255,200,50,0.5);
+  box-shadow: 0 0 30px rgba(255,180,0,0.4), inset 0 0 20px rgba(200,120,0,0.3);
+}
+.card:hover .icon-circle.hi {
+  box-shadow: 0 0 50px rgba(255,200,50,0.8), inset 0 0 30px rgba(255,160,0,0.5);
+}
+
+.icon-char {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 38px;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255,255,255,0.8);
+  line-height: 1;
+}
+
+/* ─── CARD BODY ──────────────────────────────────────────────── */
+.card-body {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.card-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, #fff 0%, rgba(200,180,255,0.9) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+}
+
+.card-domain {
+  font-size: 12px;
+  color: rgba(176,106,255,0.8);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: rgba(200,190,230,0.75);
+  line-height: 1.6;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.tag {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(176,106,255,0.5);
+  color: rgba(200,180,255,0.9);
+  background: rgba(176,106,255,0.12);
+}
+
+/* ─── LAUNCH BUTTON ──────────────────────────────────────────── */
+.card-btn {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(135deg, var(--violet) 0%, var(--pink) 60%, var(--cyan) 100%);
+  color: #fff;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 30px rgba(176,106,255,0.5);
+  width: 100%;
+  text-transform: uppercase;
+  overflow: hidden;
+}
+
+.card-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card:hover .card-btn {
+  box-shadow: 0 0 50px rgba(255,110,180,0.7), 0 0 80px rgba(176,106,255,0.4);
+  transform: scale(1.04);
+}
+
+.card:hover .card-btn::after { opacity: 1; }
+
+/* ─── FOOTER ─────────────────────────────────────────────────── */
+.footer-hint {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: rgba(176,106,255,0.4);
+  letter-spacing: 2px;
+  pointer-events: none;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .cards {
+    grid-template-columns: 1fr;
+    max-width: 440px;
+  }
+  .ring2, .ring3 { display: none; }
+}
+
+@media (max-width: 480px) {
+  .banner { padding: 38px 20px 34px; }
+  .launcher { padding: 36px 20px 60px; }
+  .card { padding: 28px 22px 26px; }
+}
