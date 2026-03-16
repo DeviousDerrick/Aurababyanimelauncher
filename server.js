@@ -155,7 +155,9 @@ app.use('/proxy/:enc(*)', async (req, res) => {
       return res.send(text);
     }
 
-    response.body.pipe(res);
+    // Vercel serverless: buffer the response instead of piping
+    const buf = await response.arrayBuffer();
+    res.send(Buffer.from(buf));
   } catch (e) {
     console.error('Proxy error:', e.message);
     if (!res.headersSent) res.status(500).json({ error: e.message });
