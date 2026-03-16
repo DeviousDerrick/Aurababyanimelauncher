@@ -3,144 +3,93 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>AuraBaby Anime Launcher</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@800;900&display=swap" rel="stylesheet">
+  <title>AuraBaby Anime</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-
-  <!-- Cosmic background layers -->
-  <div class="bg-layer stars-sm"></div>
-  <div class="bg-layer stars-md"></div>
-  <div class="bg-layer stars-lg"></div>
+  <div class="bg-stars s1"></div>
+  <div class="bg-stars s2"></div>
   <div class="nebula"></div>
+  <div id="petals"></div>
 
-  <!-- Floating sakura petals -->
-  <div class="petals" id="petals"></div>
-
-  <!-- HEADER BANNER -->
-  <header class="banner">
-    <div class="banner-inner">
-      <div class="banner-logo">
-        <span class="logo-aura">AuraBaby</span>
-        <span class="logo-anime">✦ Anime Launcher ✦</span>
-      </div>
-      <p class="banner-sub">Pick your server. Enter the world.</p>
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <span class="logo-main">AuraBaby</span>
+      <span class="logo-sub">✦ ANIME ✦</span>
     </div>
-    <div class="banner-rings">
-      <div class="ring ring1"></div>
-      <div class="ring ring2"></div>
-      <div class="ring ring3"></div>
+    <div class="search-wrap">
+      <input id="searchInput" type="text" placeholder="Search anime..." autocomplete="off"/>
+      <button id="searchBtn">⌕</button>
     </div>
   </header>
 
-  <!-- SITE CARDS -->
-  <main class="launcher">
-    <div class="section-label">⚡ SELECT SERVER ⚡</div>
+  <!-- TABS -->
+  <nav id="tabs">
+    <button class="tab active" data-mode="trending">🔥 TRENDING</button>
+    <button class="tab" data-mode="popular">⭐ POPULAR</button>
+    <button class="tab" data-mode="recent">🆕 RECENT</button>
+  </nav>
 
-    <div class="cards">
+  <!-- GRID -->
+  <main id="grid"></main>
 
-      <!-- 9Anime -->
-      <div class="card" data-url="https://9animetv.to" data-name="9Anime" data-index="0">
-        <div class="card-glow"></div>
-        <div class="card-icon">
-          <div class="icon-circle kai">
-            <span class="icon-char">9</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <h2 class="card-title">9Anime</h2>
-          <p class="card-domain">9animetv.to</p>
-          <p class="card-desc">Massive library · Fast servers · Sub & Dub</p>
-          <div class="card-tags">
-            <span class="tag">HD</span>
-            <span class="tag">SUB</span>
-            <span class="tag">DUB</span>
-          </div>
-        </div>
-        <button class="card-btn">LAUNCH →</button>
-        <div class="card-particles"></div>
+  <!-- LOADING -->
+  <div id="loadingScreen" class="loading-screen hidden">
+    <div class="spin-ring"></div>
+    <p id="loadingMsg">Loading...</p>
+  </div>
+
+  <!-- ANIME DETAIL OVERLAY -->
+  <div id="detailOverlay" class="overlay hidden">
+    <div class="overlay-box">
+      <button class="close-btn" id="closeDetail">✕</button>
+      <div class="detail-left">
+        <img id="detailPoster" src="" alt=""/>
       </div>
-
-      <!-- AniWatch -->
-      <div class="card featured" data-url="https://aniwatchtv.to" data-name="AniWatch" data-index="1">
-        <div class="card-glow"></div>
-        <div class="featured-badge">★ POPULAR</div>
-        <div class="card-icon">
-          <div class="icon-circle watch">
-            <span class="icon-char">W</span>
-          </div>
+      <div class="detail-right">
+        <h2 id="detailTitle"></h2>
+        <div class="detail-meta">
+          <span id="detailScore"></span>
+          <span id="detailYear"></span>
+          <span id="detailStatus"></span>
         </div>
-        <div class="card-body">
-          <h2 class="card-title">AniWatch</h2>
-          <p class="card-domain">aniwatchtv.to</p>
-          <p class="card-desc">Massive library · Clean UI · Zero ads</p>
-          <div class="card-tags">
-            <span class="tag">4K</span>
-            <span class="tag">SUB</span>
-            <span class="tag">DUB</span>
-            <span class="tag">BATCH</span>
+        <p id="detailDesc"></p>
+        <div id="episodeSection">
+          <div class="ep-header">
+            <h3>EPISODES</h3>
+            <span id="epLoading" class="ep-loading">loading...</span>
           </div>
+          <div id="episodeList" class="episode-grid"></div>
         </div>
-        <button class="card-btn">LAUNCH →</button>
-        <div class="card-particles"></div>
       </div>
-
-      <!-- Anitaku -->
-      <div class="card" data-url="https://anitaku.bz" data-name="Anitaku" data-index="2">
-        <div class="card-glow"></div>
-        <div class="card-icon">
-          <div class="icon-circle hi">
-            <span class="icon-char">G</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <h2 class="card-title">Anitaku</h2>
-          <p class="card-domain">anitaku.bz</p>
-          <p class="card-desc">Official Gogoanime · Huge classic library · Daily updates</p>
-          <div class="card-tags">
-            <span class="tag">HD</span>
-            <span class="tag">SUB</span>
-            <span class="tag">DUB</span>
-          </div>
-        </div>
-        <button class="card-btn">LAUNCH →</button>
-        <div class="card-particles"></div>
-      </div>
-
     </div>
-  </main>
+  </div>
 
-  <div class="footer-hint">Click any server to launch through the AuraBaby proxy</div>
+  <!-- PLAYER OVERLAY -->
+  <div id="playerOverlay" class="overlay hidden">
+    <div class="player-box">
+      <div class="player-header">
+        <button class="back-btn" id="backToDetail">← BACK</button>
+        <span id="playerTitle">Now Playing</span>
+        <button class="fullscreen-btn" id="fsBtn">⛶</button>
+      </div>
+      <div class="player-wrap" id="playerWrap">
+        <video id="videoPlayer" controls autoplay playsinline></video>
+        <div id="playerLoading" class="player-loading">
+          <div class="spin-ring sm"></div>
+          <p>Fetching stream...</p>
+        </div>
+        <div id="playerError" class="player-error hidden">
+          <p>⚠️ Stream unavailable</p>
+          <button id="tryBackup">Try Backup Source</button>
+        </div>
+      </div>
+      <div id="qualityBar" class="quality-bar"></div>
+    </div>
+  </div>
 
-  <script>
-    // Floating sakura petals
-    const petalContainer = document.getElementById('petals');
-    const PETAL_COUNT = 18;
-    const petalChars = ['✿', '✾', '❀', '✽', '❁', '꩜'];
-    for (let i = 0; i < PETAL_COUNT; i++) {
-      const p = document.createElement('div');
-      p.className = 'petal';
-      p.textContent = petalChars[Math.floor(Math.random() * petalChars.length)];
-      p.style.cssText = `
-        left: ${Math.random() * 100}%;
-        animation-delay: ${Math.random() * 12}s;
-        animation-duration: ${10 + Math.random() * 10}s;
-        font-size: ${14 + Math.random() * 18}px;
-        opacity: ${0.2 + Math.random() * 0.4};
-      `;
-      petalContainer.appendChild(p);
-    }
-
-    // Card click → open proxy viewer
-    document.querySelectorAll('.card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        const url  = card.dataset.url;
-        const name = card.dataset.name;
-        const encoded = btoa(url).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-        window.location.href = `viewer.html?site=${encoded}&name=${encodeURIComponent(name)}`;
-      });
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
